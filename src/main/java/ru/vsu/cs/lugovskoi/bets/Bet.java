@@ -1,4 +1,4 @@
-package ru.vsu.cs.lugovskoi.Bets;
+package ru.vsu.cs.lugovskoi.bets;
 
 public class Bet {
     private int minValue;

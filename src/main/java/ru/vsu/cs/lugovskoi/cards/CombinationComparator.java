@@ -1,6 +1,6 @@
-package ru.vsu.cs.lugovskoi.Cards;
+package ru.vsu.cs.lugovskoi.cards;
 
-import ru.vsu.cs.lugovskoi.Players.Player;
+import ru.vsu.cs.lugovskoi.players.Player;
 
 import java.util.*;
 

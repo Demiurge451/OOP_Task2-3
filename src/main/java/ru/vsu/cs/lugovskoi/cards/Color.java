@@ -1,4 +1,4 @@
-package ru.vsu.cs.lugovskoi.Cards;
+package ru.vsu.cs.lugovskoi.cards;
 
 public enum Color {
     BLACK("\u001B[30m"),

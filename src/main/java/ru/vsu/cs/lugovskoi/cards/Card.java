@@ -1,5 +1,6 @@
-package ru.vsu.cs.lugovskoi.Cards;
+package ru.vsu.cs.lugovskoi.cards;
 
+import ru.vsu.cs.lugovskoi.utils.*;
 public class Card {
     private final Suit suit;
     private final Rank rank;
@@ -12,6 +13,7 @@ public class Card {
         this.rank = rank;
         this.unicode = suit.getCode() + rank.getCode();
     }
+
 
     @Override
     public String toString(){

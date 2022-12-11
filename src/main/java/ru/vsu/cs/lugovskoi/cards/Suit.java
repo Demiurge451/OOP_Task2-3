@@ -1,4 +1,4 @@
-package ru.vsu.cs.lugovskoi.Cards;
+package ru.vsu.cs.lugovskoi.cards;
 
 public enum Suit {
     SPADES("\\uD83C", "\\uDCA", Color.BLACK),
