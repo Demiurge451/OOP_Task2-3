@@ -1,4 +1,8 @@
-package ru.vsu.cs.lugovskoi.Cards;
+package ru.vsu.cs.lugovskoi.cards;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 public enum Rank {
     SIX("6"),
@@ -31,4 +35,6 @@ public enum Rank {
     public String getCode() {
         return code;
     }
+
+
 }

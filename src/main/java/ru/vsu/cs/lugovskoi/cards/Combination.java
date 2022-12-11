@@ -1,4 +1,4 @@
-package ru.vsu.cs.lugovskoi.Cards;
+package ru.vsu.cs.lugovskoi.cards;
 
 public enum Combination {
     HIGH_CARD(1),
