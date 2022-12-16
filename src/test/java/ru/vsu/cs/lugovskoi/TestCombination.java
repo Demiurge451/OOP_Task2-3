@@ -6,6 +6,7 @@ import ru.vsu.cs.lugovskoi.utils.cardsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -85,5 +86,39 @@ class TestCombination {
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
         assertEquals(p4, cardsUtils.getWinner(candidates).poll());
+    }
+
+    @Test
+    void FourOfAKing() {
+        Player p1 = new Player("Player1", cardsUtils.listOfCards(new String[]{"8D", "8S", "8H", "8C", "9C"}));
+        Player p2 = new Player("Player2", cardsUtils.listOfCards(new String[]{"9D", "9S", "9H", "9S", "QC"}));
+        Player p3 = new Player("Player3", cardsUtils.listOfCards(new String[]{"KD", "KS", "KH", "KS", "10C"}));
+        Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"AD", "AS", "AH", "AS", "KC"}));
+
+        List<Player> candidates = List.of(p1, p2, p3, p4);
+        assertEquals(p4, cardsUtils.getWinner(candidates).poll());
+    }
+
+    @Test
+    void Straight_Flush() {
+        Player p1 = new Player("Player1", cardsUtils.listOfCards(new String[]{"6H", "7H", "8H", "9H", "10H"}));
+        Player p2 = new Player("Player2", cardsUtils.listOfCards(new String[]{"7C", "8C", "9C", "10C", "JC"}));
+        Player p3 = new Player("Player3", cardsUtils.listOfCards(new String[]{"8S", "9S", "10S", "JS", "QS"}));
+        Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"9D", "10D", "JD", "QD", "KD"}));
+
+        List<Player> candidates = List.of(p1, p2, p3, p4);
+        assertEquals(p4, cardsUtils.getWinner(candidates).poll());
+    }
+
+    @Test
+    void RoyalFlush() {
+        Player p1 = new Player("Player1", cardsUtils.listOfCards(new String[]{"10H", "JH", "QH", "KH", "AH"}));
+        Player p2 = new Player("Player2", cardsUtils.listOfCards(new String[]{"10C", "JC", "QC", "KC", "AC"}));
+        Player p3 = new Player("Player3", cardsUtils.listOfCards(new String[]{"10S", "JS", "QS", "KS", "AS"}));
+        Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"10D", "JD", "QD", "KD", "AD"}));
+
+        List<Player> candidates = List.of(p1, p2, p3, p4);
+        Queue<Player> winners = cardsUtils.getWinner(candidates);
+        assertEquals(candidates.size(), winners.size());
     }
 }
