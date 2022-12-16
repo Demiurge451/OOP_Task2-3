@@ -1,6 +1,7 @@
 package ru.vsu.cs.lugovskoi.cards;
 
 import ru.vsu.cs.lugovskoi.players.Player;
+import ru.vsu.cs.lugovskoi.utils.*;
 
 import java.util.*;
 
@@ -13,29 +14,13 @@ public class CombinationComparator implements Comparator<Player> {
         return compareDuplicate(o1, o2);
     }
 
-    private class Duplicate implements Comparable<Duplicate> {
-        int rank;
-        int count;
 
-        public Duplicate(int rank, int count) {
-            this.rank = rank;
-            this.count = count;
-        }
-
-        @Override
-        public int compareTo(Duplicate o) {
-            if (this.count != o.count) {
-                return Integer.compare(this.count, o.count);
-            }
-            return Integer.compare(this.rank, o.rank);
-        }
-    }
     private int compareDuplicate(Player p1, Player p2) {
-        TreeSet<Duplicate> pairs1 = findDuplicates(p1);
-        TreeSet<Duplicate> pairs2 = findDuplicates(p2);
-        TreeSet<Integer> kickers1 = findKickers(p1);
-        TreeSet<Integer> kickers2 = findKickers(p2);
-        while (pairs1.size() > 0 && pairs1.last().rank == pairs2.last().rank) {
+        TreeSet<Duplicate> pairs1 = cardsUtils.findDuplicates(p1);
+        TreeSet<Duplicate> pairs2 = cardsUtils.findDuplicates(p2);
+        TreeSet<Integer> kickers1 = cardsUtils.findKickers(p1);
+        TreeSet<Integer> kickers2 = cardsUtils.findKickers(p2);
+        while (pairs1.size() > 0 && pairs1.last().getRank() == pairs2.last().getRank()) {
             pairs1.pollLast();
             pairs2.pollLast();
         }
@@ -46,37 +31,7 @@ public class CombinationComparator implements Comparator<Player> {
             }
             return Integer.compare(kickers1.last(), kickers2.last());
         } else {
-            return Integer.compare(pairs1.last().rank, pairs2.last().rank);
+            return Integer.compare(pairs1.last().getRank(), pairs2.last().getRank());
         }
-    }
-    private TreeSet<Integer> findKickers(Player player) {
-        TreeSet<Integer> kickers = new TreeSet<>();
-        for (Card card : player.getCards()) {
-            int rank = card.getRank().ordinal();
-            if (kickers.contains(rank)) {
-                kickers.remove(rank);
-            } else {
-                kickers.add(rank);
-            }
-        }
-        return kickers;
-    }
-
-    private TreeSet<Duplicate> findDuplicates(Player player) {
-        TreeSet<Duplicate> duplicates = new TreeSet<>();
-        Map<Integer, Integer> map = new HashMap<>();
-        for (Card card : player.getCards()) {
-            int rank = card.getRank().ordinal();
-            map.put(rank, map.getOrDefault(rank, 0) + 1);
-        }
-
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            int rank = entry.getKey();
-            int count = entry.getValue();
-            if (count != 1) {
-                duplicates.add(new Duplicate(rank, count));
-            }
-        }
-        return duplicates;
     }
 }

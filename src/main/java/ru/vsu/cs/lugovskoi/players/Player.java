@@ -15,7 +15,7 @@ public class Player {
     private final int countChips = 50;
     private final int sum;
 
-    private List<Card> cards = Arrays.asList(new Card[5]);
+    private List<Card> cards;
     private Combination combination;
 
     public Player(String name, List<Card> cards) {

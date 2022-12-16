@@ -112,4 +112,35 @@ public final class cardsUtils {
         }
         return res;
     }
+
+    public static TreeSet<Integer> findKickers(Player player) {
+        TreeSet<Integer> kickers = new TreeSet<>();
+        for (Card card : player.getCards()) {
+            int rank = card.getRank().ordinal();
+            if (kickers.contains(rank)) {
+                kickers.remove(rank);
+            } else {
+                kickers.add(rank);
+            }
+        }
+        return kickers;
+    }
+
+    public static TreeSet<Duplicate> findDuplicates(Player player) {
+        TreeSet<Duplicate> duplicates = new TreeSet<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (Card card : player.getCards()) {
+            int rank = card.getRank().ordinal();
+            map.put(rank, map.getOrDefault(rank, 0) + 1);
+        }
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int rank = entry.getKey();
+            int count = entry.getValue();
+            if (count != 1) {
+                duplicates.add(new Duplicate(rank, count));
+            }
+        }
+        return duplicates;
+    }
 }
