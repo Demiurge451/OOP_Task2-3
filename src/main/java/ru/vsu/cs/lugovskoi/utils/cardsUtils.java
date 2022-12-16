@@ -21,7 +21,7 @@ public final class cardsUtils {
 
         int sumCount = 0;
         int countDuplicates = 0;
-        for (Integer count: countOfUniqueCards.values()) {
+        for (Integer count : countOfUniqueCards.values()) {
             if (count > 1) {
                 sumCount += count;
                 countDuplicates++;
@@ -38,28 +38,13 @@ public final class cardsUtils {
         return combination;
     }
 
-    //TODO rewrite sout
-    public static Queue<Player> getWinner(List<Player> players) {
-        Queue<Player> winners = new LinkedList<>();
-        PriorityQueue<Player> candidates = new PriorityQueue<>(new CombinationComparator().reversed());
-        for(Player player: players) {
-            candidates.add(player);
-            System.out.println(player.getCombination());
-        }
-        winners.add(candidates.poll());
-        while (!candidates.isEmpty() && winners.peek().getCombination().equals(candidates.peek().getCombination())) {
-            winners.add(candidates.poll());
-        }
-        return winners;
-    }
-
     private static Combination checkUniqueCombinations(List<Card> cards) {
         int prevRank = cards.get(0).getRank().ordinal() - 1;
         Suit prevSuit = cards.get(0).getSuit();
         boolean order = true;
         boolean sameSuit = true;
 
-        for (Card card: cards) {
+        for (Card card : cards) {
             int curRank = card.getRank().ordinal();
             Suit curSuit = card.getSuit();
             if (curRank != prevRank + 1) {
@@ -82,36 +67,6 @@ public final class cardsUtils {
         return resCombination;
     }
 
-    public static Rank getRankFromString(String s) {
-        if (s.length() == 2 || s.startsWith("10")) {
-            for (Rank rank : Rank.values()) {
-                if (rank.getName().charAt(0) == s.charAt(0)) {
-                    return rank;
-                }
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    public static Suit getSuitFromString(String s) {
-        int ind = s.length() - 1;
-        if (s.length() == 2 || s.startsWith("10")) {
-            for (Suit suit : Suit.values()) {
-                if (suit.getCharSuit().equals(String.valueOf(s.charAt(ind)))){
-                    return suit;
-                }
-            }
-        }
-        throw new IllegalArgumentException();
-    }
-
-    public static List<Card> listOfCards(String[] cards) {
-        List<Card> res = new ArrayList<>();
-        for (String card : cards) {
-            res.add(new Card(card));
-        }
-        return res;
-    }
 
     public static TreeSet<Integer> findKickers(Player player) {
         TreeSet<Integer> kickers = new TreeSet<>();
@@ -142,5 +97,36 @@ public final class cardsUtils {
             }
         }
         return duplicates;
+    }
+
+    public static List<Card> listOfCards(String[] cards) {
+        List<Card> res = new ArrayList<>();
+        for (String card : cards) {
+            res.add(new Card(card));
+        }
+        return res;
+    }
+
+    public static void changeCards(Player player, IReplaceCard func) {
+        TreeSet<Integer> kickers = cardsUtils.findKickers(player);
+        TreeSet<Duplicate> duplicates = cardsUtils.findDuplicates(player);
+
+        int cardToChange = new Random().nextInt(5);
+        Combination combination = player.getCombination();
+
+        if (!duplicates.isEmpty() || combination == Combination.HIGH_CARD) {
+            for (int i = 0; i < player.getCards().size(); i++) {
+                Card card = player.getCard(i);
+                int rank = card.getRank().ordinal();
+                if (kickers.contains(rank) && cardToChange > 0) {
+                    if ((combination == Combination.THREE_OF_A_KING || combination == Combination.FOUR_OF_A_KING)
+                            && card.getRank() == Rank.ACE) {
+                        continue;
+                    }
+                    player.setCard(i, func.replaceCard(card));
+                    cardToChange--;
+                }
+            }
+        }
     }
 }

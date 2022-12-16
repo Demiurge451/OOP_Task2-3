@@ -5,6 +5,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public enum Rank {
+    TWO("2"),
+    THREE("3"),
+    FOUR("4"),
+    FIVE("5"),
     SIX("6"),
     SEVEN("7"),
     EIGHT("8"),
@@ -23,7 +27,7 @@ public enum Rank {
 
     public String getName() {
         String name;
-        int rank = this.ordinal() + 6;
+        int rank = this.ordinal() + 2;
         if (rank <= 10) {
             name = String.valueOf(rank);
         } else {

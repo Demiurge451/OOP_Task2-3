@@ -16,8 +16,8 @@ public class Card {
 
     public Card(String card) {
         card = card.toUpperCase();
-        suit = cardsUtils.getSuitFromString(card);
-        rank = cardsUtils.getRankFromString(card);
+        suit = ioUtils.getSuitFromString(card);
+        rank = ioUtils.getRankFromString(card);
         unicode = suit.getCode() + rank.getCode();
     }
     @Override

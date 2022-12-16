@@ -3,6 +3,7 @@ package ru.vsu.cs.lugovskoi;
 import org.junit.jupiter.api.Test;
 import ru.vsu.cs.lugovskoi.players.Player;
 import ru.vsu.cs.lugovskoi.utils.cardsUtils;
+import ru.vsu.cs.lugovskoi.utils.gameUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"6S", "7S", "8S", "9C", "AC"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p4, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p4, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -30,7 +31,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"6D", "6S", "8S", "9C", "AC"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p2, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p2, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -41,7 +42,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"6D", "6S", "QD", "QS", "AC"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p4, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p4, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -52,7 +53,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"QD", "QS", "QH", "7S", "8C"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p2, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p2, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -63,7 +64,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"9C", "10C", "JC", "QC", "KD"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p3, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p3, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -74,7 +75,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"6C", "10C", "JC", "QC", "KC"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p3, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p3, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -85,7 +86,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"6H", "6S", "KD", "KS", "KC"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p4, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p4, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -96,7 +97,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"AD", "AS", "AH", "AS", "KC"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p4, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p4, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -107,7 +108,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"9D", "10D", "JD", "QD", "KD"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        assertEquals(p4, cardsUtils.getWinner(candidates).poll());
+        assertEquals(p4, gameUtils.getWinner(candidates).poll());
     }
 
     @Test
@@ -118,7 +119,7 @@ class TestCombination {
         Player p4 = new Player("Player4", cardsUtils.listOfCards(new String[]{"10D", "JD", "QD", "KD", "AD"}));
 
         List<Player> candidates = List.of(p1, p2, p3, p4);
-        Queue<Player> winners = cardsUtils.getWinner(candidates);
+        Queue<Player> winners = gameUtils.getWinner(candidates);
         assertEquals(candidates.size(), winners.size());
     }
 }

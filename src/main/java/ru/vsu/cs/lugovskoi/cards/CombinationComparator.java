@@ -20,7 +20,7 @@ public class CombinationComparator implements Comparator<Player> {
         TreeSet<Duplicate> pairs2 = cardsUtils.findDuplicates(p2);
         TreeSet<Integer> kickers1 = cardsUtils.findKickers(p1);
         TreeSet<Integer> kickers2 = cardsUtils.findKickers(p2);
-        while (pairs1.size() > 0 && pairs1.last().getRank() == pairs2.last().getRank()) {
+        while (pairs1.size() > 0 && pairs1.last().rank() == pairs2.last().rank()) {
             pairs1.pollLast();
             pairs2.pollLast();
         }
@@ -31,7 +31,7 @@ public class CombinationComparator implements Comparator<Player> {
             }
             return Integer.compare(kickers1.last(), kickers2.last());
         } else {
-            return Integer.compare(pairs1.last().getRank(), pairs2.last().getRank());
+            return Integer.compare(pairs1.last().rank(), pairs2.last().rank());
         }
     }
 }

@@ -1,27 +1,27 @@
 package ru.vsu.cs.lugovskoi.game;
 
-import ru.vsu.cs.lugovskoi.bets.Bet;
-import ru.vsu.cs.lugovskoi.cards.Card;
-import ru.vsu.cs.lugovskoi.cards.Combination;
-import ru.vsu.cs.lugovskoi.cards.Rank;
-import ru.vsu.cs.lugovskoi.cards.Suit;
+import ru.vsu.cs.lugovskoi.bets.Bets;
+import ru.vsu.cs.lugovskoi.bets.Chip;
+import ru.vsu.cs.lugovskoi.cards.*;
 import ru.vsu.cs.lugovskoi.players.Player;
 import ru.vsu.cs.lugovskoi.utils.*;
 
 import java.util.*;
 
 public class Poker {
-    private final Bet bet;
+    private final Bets bets;
     private final Queue<Card> deck;
     private final Queue<Card> discardingCards;
     private final List<Player> players;
+    private final int countRounds;
 
-    public Poker(int countPlayers) {
-        this(countPlayers, 5, 1900);
+    public Poker(int countPlayers, int countRounds) {
+        this(countPlayers, 5, 1900, countRounds);
     }
 
-    private Poker(int countPlayers, int minBet, int capital) {
-        bet = new Bet(minBet, capital);
+    private Poker(int countPlayers, int minBet, int capital, int countRounds) {
+        this.countRounds = countRounds;
+        bets = new Bets(minBet, capital / countRounds);
         deck = createDeck();
         shuffleDeck();
         players = createPlayers(countPlayers);
@@ -67,16 +67,7 @@ public class Poker {
     }
 
 
-    public void startGame() {
-        for (Player player : players) {
-            for (int i = 0; i < 5; i++) {
-                System.out.print(player.getCard(i) + " ");
-            }
-            System.out.println();
-        }
 
-        finishGame();
-    }
 
     private void updateDeck() {
         deck.addAll(discardingCards);
@@ -84,58 +75,52 @@ public class Poker {
     }
 
 
-    //TODO create
-    private void trade() {
-
-    }
-
-    private void changeCards(Player player) {
-        TreeSet<Integer> kickers = cardsUtils.findKickers(player);
-        TreeSet<Duplicate> duplicates = cardsUtils.findDuplicates(player);
-        int cardToChange = (int) (Math.random() * (kickers.size() + 1));
-        Combination combination = player.getCombination();
-        if (!duplicates.isEmpty() || combination == Combination.HIGH_CARD) {
-            for (int i = 0; i < player.getCards().size(); i++) {
-                Card card = player.getCard(i);
-                if (kickers.contains(card.getRank()) && cardToChange > 0) {
-                    if ((combination == Combination.THREE_OF_A_KING || combination == Combination.FOUR_OF_A_KING)
-                            && card.getRank() == Rank.ACE) {
-                        continue;
-                    }
-                    player.setCard(i, replaceCard(card));
-                    cardToChange--;
-                }
-            }
+    private int trade(Player player) {
+        int bet = gameUtils.createBet(player, bets);
+        if (bet < bets.getMinValue()) {
+            players.remove(player);
+        } else {
+            bets.setBet(bet);
         }
+        return bet;
     }
 
-    private Card replaceCard(Card card) {
-        discardingCards.add(card);
-        if (deck.size() == 0) {
-            updateDeck();
-        }
-        return deck.poll();
-    }
 
-    private void decomposeCombination(Player player) {
 
-    }
-
-    private void finishGame() {
-        for(Player player: players) {
-            changeCards(player);
+    public void startGame() {
+        for (Player player : players) {
             for (int i = 0; i < 5; i++) {
                 System.out.print(player.getCard(i) + " ");
             }
-            System.out.println();
+            System.out.println(trade(player));
         }
 
-        Queue<Player> candidates = cardsUtils.getWinner(players);
+        finishGame();
+    }
+
+    private void finishGame() {
+        System.out.println();
+        for(Player player: players) {
+            cardsUtils.changeCards(player, card -> {
+                discardingCards.add(card);
+                if (deck.size() == 0) {
+                    updateDeck();
+                }
+                return deck.poll();
+            });
+
+            for (int i = 0; i < 5; i++) {
+                System.out.print(player.getCard(i) + " ");
+            }
+            System.out.println(trade(player));
+        }
+
+        Queue<Player> candidates = gameUtils.getWinner(players);
         Player firstWinner = candidates.poll();
         System.out.println(firstWinner);
         while (!candidates.isEmpty()) {
             assert firstWinner != null;
-            if (!(candidates.peek().getCombination() == firstWinner.getCombination())) break;
+            if (!(candidates.peek() == firstWinner)) break;
             System.out.println(candidates.poll());
         }
     }

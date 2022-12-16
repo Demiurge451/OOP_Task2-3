@@ -11,9 +11,9 @@ import java.util.*;
 
 public class Player {
     private final String name;
-    Map<Chip, Integer> chips = new TreeMap<>(Comparator.comparingInt(Chip::value));
+    private Map<Chip, Integer> chips = new TreeMap<>((o1, o2) -> Integer.compare(o2.value(), o1.value()));
     private final int countChips = 50;
-    private final int sum;
+    private int sum;
 
     private List<Card> cards;
     private Combination combination;
@@ -45,6 +45,7 @@ public class Player {
     public void setCard(int ind, Card card) {
         checkIndex(ind);
         cards.set(ind, card);
+        setCombination(cardsUtils.createCombinations(cards));
     }
 
     public String getName() {
@@ -70,6 +71,35 @@ public class Player {
         this.combination = combination;
     }
 
+    public int getSum() {
+        return sum;
+    }
+
+    public Map<Chip, Integer> getChips() {
+        return chips;
+    }
+
+    public void setSum(int sum) {
+        this.sum = sum;
+    }
+
+    public int takeChip(Chip chip, int curBet) {
+        int bet = 0;
+        if (chips.get(chip) == null) {
+            throw new IllegalArgumentException();
+        }
+        while (curBet > bet + chip.value()) {
+            if (chips.get(chip) != 0) {
+                sum -= chip.value();
+                bet += chip.value();
+                chips.put(chip, chips.get(chip) - 1);
+            } else {
+                break;
+            }
+        }
+
+        return bet;
+    }
 
     @Override
     public String toString() {
