@@ -14,7 +14,12 @@ public class Card {
         this.unicode = suit.getCode() + rank.getCode();
     }
 
-
+    public Card(String card) {
+        card = card.toUpperCase();
+        suit = cardsUtils.getSuitFromString(card);
+        rank = cardsUtils.getRankFromString(card);
+        unicode = suit.getCode() + rank.getCode();
+    }
     @Override
     public String toString(){
         String suitSym = unicode.substring(2, 6);
