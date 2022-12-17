@@ -65,9 +65,12 @@ public final class ioUtils {
         out.println();
     }
 
-    public static void printInfoAboutWinners(List<Player> winners) {
+    public static void printInfoAboutWinners(List<Player> winners, int bank) {
+        int curBank = bank / winners.size();
         out.printf("Winners:\n");
         printCurRoundInfo(winners, 0);
+        out.printf("Bank for every winners: %d\n", bank / winners.size());
+
     }
 
     public static void close() {

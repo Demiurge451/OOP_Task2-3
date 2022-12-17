@@ -13,7 +13,6 @@ public final class gameUtils {
         throw new UnsupportedOperationException();
     }
 
-    //TODO rewrite sout
     public static Queue<Player> getWinner(List<Player> players) {
         CombinationComparator comparator = new CombinationComparator();
         Queue<Player> winners = new LinkedList<>();
@@ -54,7 +53,7 @@ public final class gameUtils {
         Random random = new Random();
         Combination combination = player.getCombination();
         int max = 100;
-        int min = (combination.ordinal() * 10 + 10);
+        int min = combination.ordinal() * 10 + 10;
         int chance = random.nextInt(max - min + 1) + min;
         return chance >= 50;
     }

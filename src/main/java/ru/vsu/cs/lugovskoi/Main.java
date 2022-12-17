@@ -5,7 +5,7 @@ import ru.vsu.cs.lugovskoi.game.Poker;
 
 public class Main {
     public static void main(String[] args) {
-        Poker poker = new Poker(8, 3);
+        Poker poker = new Poker(8, 1);
         poker.startGame();
     }
 }

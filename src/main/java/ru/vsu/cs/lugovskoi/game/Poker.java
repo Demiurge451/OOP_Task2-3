@@ -16,6 +16,9 @@ public class Poker {
 
     public Poker(int countPlayers, int countRounds) {
         this(countPlayers, 5, 1900, countRounds);
+        if (countPlayers > 10 || countPlayers < 0) {
+            throw new IllegalArgumentException("countPlayers must be <= 10 && > 0");
+        }
     }
 
     private Poker(int countPlayers, int minBet, int capital, int countRounds) {
@@ -128,7 +131,7 @@ public class Poker {
             if (!(candidates.peek() == firstWinner)) break;
             winners.add(candidates.poll());
         }
-        ioUtils.printInfoAboutWinners(winners);
+        ioUtils.printInfoAboutWinners(winners, bets.getBank());
     }
 }
 
