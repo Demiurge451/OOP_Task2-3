@@ -2,9 +2,16 @@ package ru.vsu.cs.lugovskoi.utils;
 
 import ru.vsu.cs.lugovskoi.cards.Rank;
 import ru.vsu.cs.lugovskoi.cards.Suit;
+import ru.vsu.cs.lugovskoi.players.Player;
+
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
 
 
 public final class ioUtils {
+    private static final PrintWriter out = new PrintWriter(System.out);
+
     private ioUtils() {
         throw new UnsupportedOperationException();
     }
@@ -32,5 +39,38 @@ public final class ioUtils {
         throw new IllegalArgumentException();
     }
 
+    public static void printInformationAboutPlayer(Player player) {
+        out.printf("%S, combination: %S ", player.getName(), player.getCombination());
+        for (int i = 0; i < player.getCards().size(); i++) {
+            out.printf(player.getCard(i) + " ");
+        }
+        out.println();
+    }
 
+    public static void printCurRoundInfo(List<Player> players, int round) {
+        if (round != 0) {
+            out.printf("Round %d\n", round);
+        }
+        for (Player player : players) {
+            printInformationAboutPlayer(player);
+        }
+        out.println();
+    }
+
+    public static void printCurTradeInfo(Map<Player, Integer> playersBets) {
+        out.print("Bets of players:\n");
+        for (Map.Entry<Player, Integer> entry : playersBets.entrySet()) {
+            out.printf("%s, bet = %d\n", entry.getKey().getName(), entry.getValue());
+        }
+        out.println();
+    }
+
+    public static void printInfoAboutWinners(List<Player> winners) {
+        out.printf("Winners:\n");
+        printCurRoundInfo(winners, 0);
+    }
+
+    public static void close() {
+        out.close();
+    }
 }

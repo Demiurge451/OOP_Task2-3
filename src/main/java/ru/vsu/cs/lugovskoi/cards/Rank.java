@@ -1,8 +1,5 @@
 package ru.vsu.cs.lugovskoi.cards;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
 
 public enum Rank {
     TWO("2"),

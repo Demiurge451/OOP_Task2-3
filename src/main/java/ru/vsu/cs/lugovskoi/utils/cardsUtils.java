@@ -70,13 +70,16 @@ public final class cardsUtils {
 
     public static TreeSet<Integer> findKickers(Player player) {
         TreeSet<Integer> kickers = new TreeSet<>();
+        Set<Integer> values = new HashSet<>();
         for (Card card : player.getCards()) {
             int rank = card.getRank().ordinal();
-            if (kickers.contains(rank)) {
+            if (values.contains(rank)) {
                 kickers.remove(rank);
-            } else {
+            }
+            if (!values.contains(rank)) {
                 kickers.add(rank);
             }
+            values.add(rank);
         }
         return kickers;
     }

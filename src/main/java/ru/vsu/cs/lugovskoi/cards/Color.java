@@ -7,7 +7,6 @@ public enum Color {
     PURPLE("\u001B[35m");
 
     private final String code;
-    private final String reset = "\u001B[0m";
 
     Color(String code) {
         this.code = code;
@@ -20,6 +19,6 @@ public enum Color {
     }
 
     public String reset() {
-        return reset;
+        return "\u001B[0m";
     }
 }

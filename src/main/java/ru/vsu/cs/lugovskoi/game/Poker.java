@@ -1,7 +1,6 @@
 package ru.vsu.cs.lugovskoi.game;
 
-import ru.vsu.cs.lugovskoi.bets.Bets;
-import ru.vsu.cs.lugovskoi.bets.Chip;
+import ru.vsu.cs.lugovskoi.players.Bets;
 import ru.vsu.cs.lugovskoi.cards.*;
 import ru.vsu.cs.lugovskoi.players.Player;
 import ru.vsu.cs.lugovskoi.utils.*;
@@ -20,7 +19,7 @@ public class Poker {
     }
 
     private Poker(int countPlayers, int minBet, int capital, int countRounds) {
-        this.countRounds = countRounds;
+        this.countRounds = countRounds + 1;
         bets = new Bets(minBet, capital / countRounds);
         deck = createDeck();
         shuffleDeck();
@@ -36,7 +35,7 @@ public class Poker {
             for (int j = 0; j < 5; j++) {
                 cards.add(deck.poll());
             }
-            players.add(new Player("" + i, cards));
+            players.add(new Player("Player " + (i + 1), cards));
         }
         return players;
     }
@@ -67,66 +66,69 @@ public class Poker {
     }
 
 
-
-
     private void updateDeck() {
         deck.addAll(discardingCards);
         shuffleDeck();
     }
 
-
-    private int trade(Player player) {
-        int bet = gameUtils.createBet(player, bets);
-        if (bet < bets.getMinValue()) {
-            players.remove(player);
-        } else {
-            bets.setBet(bet);
+    private void trade(List<Player> players) {
+        List<Player> toRemove = new ArrayList<>();
+        Map<Player, Integer> playersBets = new LinkedHashMap<>();
+        for (Player player : players) {
+            int bet = gameUtils.createBet(player, bets);
+            if (!bets.isBetCorrect(bet) && toRemove.size() + 1 < players.size() ) {
+                toRemove.add(player);
+            } else if (bets.isBetCorrect(bet)){
+                playersBets.put(player, bet);
+                bets.setBet(bet);
+                bets.setMinValue(Math.max(bet, bets.getMinValue()));
+            }
         }
-        return bet;
+        players.removeAll(toRemove);
+        ioUtils.printCurTradeInfo(playersBets);
     }
 
-
-
     public void startGame() {
-        for (Player player : players) {
-            for (int i = 0; i < 5; i++) {
-                System.out.print(player.getCard(i) + " ");
-            }
-            System.out.println(trade(player));
-        }
+        ioUtils.printCurRoundInfo(players, 0);
+        continueGame();
+        ioUtils.close();
+    }
 
+    private void changeCards(Player player) {
+        cardsUtils.changeCards(player, card -> {
+            discardingCards.add(card);
+            if (deck.size() == 0) {
+                updateDeck();
+            }
+            return deck.poll();
+        });
+    }
+
+    public void continueGame() {
+        for (int i = 1; i < countRounds; i++) {
+            for (Player player : players) {
+                changeCards(player);
+            }
+            trade(players);
+            ioUtils.printCurRoundInfo(players, i);
+            if (players.size() == 1) {
+                break;
+            }
+        }
         finishGame();
     }
 
     private void finishGame() {
-        System.out.println();
-        for(Player player: players) {
-            cardsUtils.changeCards(player, card -> {
-                discardingCards.add(card);
-                if (deck.size() == 0) {
-                    updateDeck();
-                }
-                return deck.poll();
-            });
-
-            for (int i = 0; i < 5; i++) {
-                System.out.print(player.getCard(i) + " ");
-            }
-            System.out.println(trade(player));
-        }
-
         Queue<Player> candidates = gameUtils.getWinner(players);
+        List<Player> winners = new ArrayList<>();
         Player firstWinner = candidates.poll();
-        System.out.println(firstWinner);
+        winners.add(firstWinner);
         while (!candidates.isEmpty()) {
             assert firstWinner != null;
             if (!(candidates.peek() == firstWinner)) break;
-            System.out.println(candidates.poll());
+            winners.add(candidates.poll());
         }
-    }
-
-    public Queue<Card> getDeck() {
-        return deck;
+        ioUtils.printInfoAboutWinners(winners);
     }
 }
 

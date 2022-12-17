@@ -1,8 +1,8 @@
-package ru.vsu.cs.lugovskoi.bets;
+package ru.vsu.cs.lugovskoi.players;
 
 public class Bets {
     private int minValue;
-    private int maxValue;
+    private final int maxValue;
     private int bank;
 
     public Bets(int minValue, int maxValue) {
@@ -10,11 +10,8 @@ public class Bets {
         this.maxValue = maxValue;
     }
 
-    private boolean isBetCorrect(int bet) {
-        if (bet >= minValue && bet <= maxValue) {
-            return true;
-        }
-        return false;
+    public boolean isBetCorrect(int bet) {
+        return bet >= minValue && bet <= maxValue;
     }
 
     public void setBet(int bet) {
@@ -39,9 +36,5 @@ public class Bets {
 
     public int getMaxValue() {
         return maxValue;
-    }
-
-    public void setMaxValue(int maxValue) {
-        this.maxValue = maxValue;
     }
 }

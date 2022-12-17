@@ -1,7 +1,8 @@
 package ru.vsu.cs.lugovskoi.utils;
 
-import ru.vsu.cs.lugovskoi.bets.Bets;
-import ru.vsu.cs.lugovskoi.bets.Chip;
+import ru.vsu.cs.lugovskoi.cards.Combination;
+import ru.vsu.cs.lugovskoi.players.Bets;
+import ru.vsu.cs.lugovskoi.players.Chip;
 import ru.vsu.cs.lugovskoi.cards.CombinationComparator;
 import ru.vsu.cs.lugovskoi.players.Player;
 
@@ -18,10 +19,7 @@ public final class gameUtils {
         Queue<Player> winners = new LinkedList<>();
         PriorityQueue<Player> candidates = new PriorityQueue<>(comparator.reversed());
 
-        for (Player player : players) {
-            candidates.add(player);
-            System.out.println(player.getCombination());
-        }
+        candidates.addAll(players);
 
         winners.add(candidates.poll());
         while (!candidates.isEmpty()) {
@@ -34,7 +32,10 @@ public final class gameUtils {
 
     public static int createBet(Player player, Bets bets) {
         int max = bets.getMaxValue();
-        int min = (max * (player.getCombination().ordinal() + 1) * 10) / 100;
+        int min = 0;
+        if (wantRaise(player)) {
+            min = bets.getMinValue();
+        }
         min = Math.min(min, max);
 
         int potentialBet = new Random().nextInt(max - min + 1) + min;
@@ -47,5 +48,14 @@ public final class gameUtils {
             bet += sum;
         }
         return bet;
+    }
+
+    public static boolean wantRaise(Player player) {
+        Random random = new Random();
+        Combination combination = player.getCombination();
+        int max = 100;
+        int min = (combination.ordinal() * 10 + 10);
+        int chance = random.nextInt(max - min + 1) + min;
+        return chance >= 50;
     }
 }
